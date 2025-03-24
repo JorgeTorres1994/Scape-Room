@@ -1,0 +1,88 @@
+body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #1e293b;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding-top: 20px;
+    transition: width 0.3s;
+    z-index: 1000;
+}
+
+.sidebar a {
+    color: #f1f5f9;
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover {
+    background-color: #334155;
+}
+
+.sidebar i {
+    margin-right: 10px;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar.collapsed a span {
+    display: none;
+}
+
+.menu-toggle {
+    cursor: pointer;
+    text-align: right;
+    padding: 0 20px;
+    margin-bottom: 10px;
+    color: #f8fafc;
+}
+
+.content {
+    margin-left: 260px;
+    transition: margin-left 0.3s;
+    padding: 20px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    gap: 10px;
+}
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: #1e293b;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
+}
+
+.profile-menu.show-menu {
+    display: block;
+}
+
+.profile-menu a {
+    display: block;
+    color: #f1f5f9;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.profile-menu a:hover {
+    background-color: #334155;
+}
