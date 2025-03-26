@@ -23,7 +23,10 @@
         </div>
         <h3 class="text-center mt-3">Admin</h3>
         <a href="<?= base_url('/admin/dashboard') ?>"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
+        <a href="<?= base_url('/admin/equipos') ?>"><i class="fas fa-users"></i> <span>Equipos</span></a>
         <a href="<?= base_url('/admin/salas') ?>"><i class="fas fa-door-open"></i> <span>Salas</span></a>
+        <a href="<?= base_url('/admin/clientes') ?>"><i class="fas fa-users"></i> <span>Clientes</span></a>
+        <a href="<?= base_url('/admin/horarios') ?>"><i class="fas fa-clock"></i> <span>Horarios</span></a>
         <a href="<?= base_url('/admin/reservas') ?>"><i class="fas fa-calendar-check"></i> <span>Reservas</span></a>
         <a href="<?= base_url('/admin/calificaciones') ?>"><i class="fas fa-star"></i> <span>Calificaciones</span></a>
         <a href="<?= base_url('/admin/usuarios') ?>"><i class="fas fa-user"></i> <span>Usuarios</span></a>

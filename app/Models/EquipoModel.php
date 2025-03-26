@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class EquipoModel extends Model
+{
+    protected $table      = 'equipo';
+    protected $primaryKey = 'id';
+
+    protected $allowedFields = ['nombre'];
+    protected $returnType    = 'array';
+    protected $useTimestamps = true;
+    protected $createdField  = 'creado_en';
+}
