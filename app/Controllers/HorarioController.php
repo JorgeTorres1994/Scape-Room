@@ -7,7 +7,7 @@ use App\Models\SalaModel;
 
 class HorarioController extends BaseController
 {
-    public function index()
+    public function horarios()
     {
         $horarioModel = new HorarioModel();
         $salaModel    = new SalaModel();

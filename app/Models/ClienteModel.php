@@ -10,6 +10,6 @@ class ClienteModel extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['nombre_completo', 'telefono', 'correo'];
     protected $returnType       = 'array';
-    protected $useTimestamps    = true;
+    protected $useTimestamps    = false;
     protected $createdField     = 'creado_en';
 }

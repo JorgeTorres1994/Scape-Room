@@ -15,4 +15,11 @@ $routes->get('/admin/equipos', 'EquipoController::equipos');
 
 $routes->get('/admin/clientes', 'ClienteController::clientes');
 
-$routes->get('/admin/horarios', 'HorarioController::index');
+$routes->get('/admin/horarios', 'HorarioController::horarios');
+
+$routes->get('/admin/rankings', 'RankingController::rankings');
+
+$routes->get('admin/reservas', 'ReservaController::reservas');
+$routes->get('admin/reservas/obtener', 'ReservaController::obtenerReservas');
+$routes->post('admin/reservas/crear', 'ReservaController::crear');
+
