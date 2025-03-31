@@ -13,4 +13,5 @@ class EquipoModel extends Model
     protected $returnType    = 'array';
     protected $useTimestamps = true;
     protected $createdField  = 'creado_en';
+    protected $updatedField  = '';
 }

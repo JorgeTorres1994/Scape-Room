@@ -10,6 +10,6 @@ class RankingModel extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['equipo_id', 'sala_id', 'tiempo'];
     protected $returnType       = 'array';
-    protected $useTimestamps    = true;
+    protected $useTimestamps    = false;
     protected $createdField     = 'registrado_en';
 }

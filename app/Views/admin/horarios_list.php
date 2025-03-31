@@ -59,6 +59,27 @@
 <script>
     $(document).ready(function() {
         $('#horariosTable').DataTable({
+            ajax: {
+                url: "<?= base_url('admin/horarios/obtener') ?>",
+                dataSrc: 'data'
+            },
+            columns: [{
+                    data: 'id'
+                },
+                {
+                    data: 'sala_nombre'
+                },
+                {
+                    data: 'hora',
+                    render: data => data.substring(0, 5)
+                },
+                {
+                    data: 'activo',
+                    render: data => data == 1 ?
+                        '<span class="badge bg-success">Sí</span>' :
+                        '<span class="badge bg-secondary">No</span>'
+                }
+            ],
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
                 zeroRecords: "No se encontraron horarios",

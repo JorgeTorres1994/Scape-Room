@@ -3,6 +3,8 @@
 <?= $this->section('content') ?>
 <h2 class="text-center my-4">Listado de Equipos</h2>
 
+<a href="<?= base_url('admin/equipos/crear') ?>" class="btn btn-primary">Nuevo Equipo</a>
+
 <div class="table-responsive">
     <table id="equiposTable" class="table table-light table-hover text-center align-middle shadow-sm rounded">
         <thead class="table-primary">
@@ -55,6 +57,11 @@
 <script>
     $(document).ready(function() {
         $('#equiposTable').DataTable({
+            order: [
+                [1, 'asc']
+            ], // 👈 Columna 1 (Fecha de Registro) en orden ascendente por defecto
+            paging: true,
+            searching: true,
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "No se encontraron equipos",

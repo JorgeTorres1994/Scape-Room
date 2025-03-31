@@ -28,7 +28,7 @@
         <a href="<?= base_url('/admin/clientes') ?>"><i class="fas fa-users"></i> <span>Clientes</span></a>
         <a href="<?= base_url('/admin/horarios') ?>"><i class="fas fa-clock"></i> <span>Horarios</span></a>
         <a href="<?= base_url('/admin/reservas') ?>"><i class="fas fa-calendar-check"></i> <span>Reservas</span></a>
-        <a href="<?= base_url('/admin/rankings') ?>"><i class="fas fa-star"></i> <span>Rankings</span></a>
+        <a href="<?= base_url('/admin/ranking') ?>"><i class="fas fa-star"></i> <span>Rankings</span></a>
         <a href="<?= base_url('/admin/usuarios') ?>"><i class="fas fa-user"></i> <span>Usuarios</span></a>
     </div>
 

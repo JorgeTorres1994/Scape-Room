@@ -10,22 +10,15 @@
                 <th>Equipo</th>
                 <th>Sala</th>
                 <th>Tiempo</th>
-                <th>Registrado</th>
+                <th>Fecha Registro</th>
+                <th>Acciones</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($rankings as $item): ?>
-                <tr>
-                    <td><?= esc($item['equipo_nombre']) ?></td>
-                    <td><?= esc($item['sala_nombre']) ?></td>
-                    <td><?= esc(substr($item['tiempo'], 0, 5)) ?> ⏱</td>
-                    <td><?= date('d/m/Y H:i', strtotime($item['registrado_en'])) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+        <tbody></tbody>
     </table>
 </div>
 
+<!-- Estilos DataTables personalizados -->
 <style>
     .dataTables_wrapper {
         color: white;
@@ -51,16 +44,40 @@
     }
 </style>
 
+<!-- DataTables scripts -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#rankingTable').DataTable({
+            ajax: {
+                url: "<?= base_url('admin/ranking/obtener') ?>",
+                dataSrc: 'data'
+            },
+            columns: [
+                { data: 'equipo_nombre' },
+                { data: 'sala_nombre' },
+                { data: 'tiempo' },
+                {
+                    data: 'registrado_en',
+                    render: data => {
+                        const date = new Date(data);
+                        return date.toLocaleDateString('es-PE');
+                    }
+                },
+                {
+                    data: 'id',
+                    render: function (data) {
+                        return `<a href="<?= base_url('admin/ranking/editar/') ?>${data}" class="btn btn-sm btn-warning">Editar</a>`;
+                    }
+                }
+            ],
+            order: [[3, 'desc']], // orden por fecha descendente
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
-                zeroRecords: "No se encontraron resultados",
+                zeroRecords: "No se encontraron rankings",
                 info: "Mostrando página _PAGE_ de _PAGES_",
                 infoEmpty: "No hay registros disponibles",
                 infoFiltered: "(filtrado de _MAX_ registros en total)",
