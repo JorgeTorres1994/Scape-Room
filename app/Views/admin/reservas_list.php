@@ -4,32 +4,16 @@
 <h2 class="text-center my-4">Reservas</h2>
 
 <div class="table-responsive">
-    <!-- <table id="reservasTable" class="table table-light table-hover text-center align-middle shadow-sm rounded">
-        <thead class="table-dark">
-            <tr>
-                <th>Cliente</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Sala</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Jugadores</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table> -->
     <table id="reservasTable" class="table table-light table-hover text-center align-middle shadow-sm rounded">
-        <thead>
+        <thead class="table-primary">
             <tr>
                 <th>Cliente</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
                 <th>Sala</th>
                 <th>Hora</th>
                 <th>Jugadores</th>
-                <th>Fecha</th>
                 <th>Estado</th>
+                <th>Fecha Registro</th>
+                <th>Acciones</th>
             </tr>
         </thead>
     </table>
@@ -76,15 +60,8 @@
                     data: 'nombre_completo'
                 },
                 {
-                    data: 'correo'
-                },
-                {
-                    data: 'telefono'
-                },
-                {
                     data: 'sala_nombre'
                 },
-
                 {
                     data: 'hora'
                 },
@@ -92,14 +69,46 @@
                     data: 'cantidad_jugadores'
                 },
                 {
+                    data: 'estado',
+                    render: function(data) {
+                        if (data === 'pendiente') {
+                            return '<span class="badge bg-warning text-dark">Pendiente</span>';
+                        } else if (data === 'confirmada') {
+                            return '<span class="badge bg-success">Confirmada</span>';
+                        } else if (data === 'cancelada') {
+                            return '<span class="badge bg-danger">Cancelada</span>';
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                {
                     data: 'fecha'
                 },
                 {
-                    data: 'estado'
+                    data: 'id',
+                    render: function(data, type, row) {
+                        return `<a href="<?= base_url('admin/reservas/editar/') ?>${data}" class="btn btn-sm btn-warning">Editar</a>`;
+                    },
+                    orderable: false,
+                    searchable: false
                 }
-            ]
+            ],
+            language: {
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                zeroRecords: "No se encontraron reservas",
+                info: "Mostrando página _PAGE_ de _PAGES_",
+                infoEmpty: "No hay registros disponibles",
+                infoFiltered: "(filtrado de _MAX_ registros en total)",
+                search: "Buscar:",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            }
         });
-
     });
 </script>
 

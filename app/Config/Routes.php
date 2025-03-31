@@ -26,8 +26,18 @@ $routes->get('admin/ranking/obtener', 'RankingController::obtener'); // JSON
 $routes->get('admin/ranking/editar/(:num)', 'RankingController::editar/$1'); // Formulario
 $routes->post('admin/ranking/actualizar/(:num)', 'RankingController::actualizar/$1'); // Guardado
 
+// Vistas y DataTables
+$routes->get('/admin/reservas', 'ReservaController::reservas'); // Vista principal (listado)
+$routes->get('/admin/reservas/obtener', 'ReservaController::obtenerReservas'); // JSON para DataTables
 
-$routes->get('admin/reservas', 'ReservaController::reservas');
-$routes->get('admin/reservas/obtener', 'ReservaController::obtenerReservas');
-$routes->post('admin/reservas/crear', 'ReservaController::crear');
+// Crear nueva reserva
+$routes->post('/admin/reservas/crear', 'ReservaController::crear'); // JSON desde frontend o API (Postman)
+$routes->post('/admin/reservas/guardar', 'ReservaController::guardar'); // Formulario clásico (web)
 
+// Editar reserva
+$routes->get('/admin/reservas/editar/(:num)', 'ReservaController::editar/$1'); // Formulario web
+$routes->post('/admin/reservas/actualizar/(:num)', 'ReservaController::actualizar/$1'); // Web o JSON POST
+
+// Notificaciones
+$routes->get('/admin/notificaciones', 'NotificacionController::obtener');
+$routes->post('/admin/notificaciones/marcar-leida/(:num)', 'NotificacionController::marcarLeida/$1');

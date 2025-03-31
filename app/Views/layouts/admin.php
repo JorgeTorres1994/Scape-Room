@@ -33,15 +33,31 @@
     </div>
 
     <div class="content">
-        <nav class="navbar navbar-dark bg-dark px-4">
+        <nav class="navbar navbar-dark bg-dark px-4 justify-content-between">
             <span class="navbar-brand">
                 <i class="fas fa-dungeon me-2"></i> Escape Room Admin
             </span>
-            <div class="profile" onclick="toggleProfileMenu()">
-                <img src="<?= $usuario_imagen ?>" alt="Usuario" class="rounded-circle" width="40" height="40">
-                <span><?= esc($usuario_nombre) ?></span>
-                <div class="profile-menu" id="profileMenu">
-                    <a href="<?= base_url('/logout') ?>">Cerrar sesión</a>
+            <div class="d-flex align-items-center gap-4">
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <button class="btn btn-dark position-relative" id="notificacionesBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notif-count">
+                            0
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2 rounded-4" id="notificacionesLista" style="width: 320px; max-height: 400px; overflow-y: auto;">
+                        <li class="dropdown-item text-center text-muted">Sin notificaciones</li>
+                    </ul>
+                </div>
+
+                <!-- Perfil -->
+                <div class="profile" onclick="toggleProfileMenu()">
+                    <img src="<?= $usuario_imagen ?>" alt="Usuario" class="rounded-circle" width="40" height="40">
+                    <span><?= esc($usuario_nombre) ?></span>
+                    <div class="profile-menu" id="profileMenu">
+                        <a href="<?= base_url('/logout') ?>">Cerrar sesión</a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -65,6 +81,53 @@
             menu.classList.toggle('show-menu');
         }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const notifCount = document.getElementById('notif-count');
+            const notifLista = document.getElementById('notificacionesLista');
+
+            function cargarNotificaciones() {
+                fetch("<?= base_url('admin/notificaciones') ?>")
+                    .then(res => res.json())
+                    .then(data => {
+                        notifCount.textContent = data.noLeidas;
+
+                        if (data.notificaciones.length === 0) {
+                            notifLista.innerHTML = `<li class="dropdown-item text-center text-muted">Sin notificaciones</li>`;
+                        } else {
+                            notifLista.innerHTML = '';
+
+                            data.notificaciones.forEach(n => {
+                                const item = document.createElement('li');
+                                item.classList.add('dropdown-item', 'd-flex', 'justify-content-between', 'align-items-start', 'flex-column');
+
+                                item.innerHTML = `
+                            <div>
+                                <span class="fw-semibold">${n.mensaje}</span>
+                            </div>
+                            <div class="mt-2 d-flex justify-content-between w-100">
+                                <a href="<?= base_url('admin/reservas/editar') ?>/${n.reserva_id}" class="btn btn-sm btn-primary">Ver reserva</a>
+                                ${n.leida == 0 ? `<button onclick="marcarLeida(${n.id})" class="btn btn-sm btn-outline-secondary ms-2">Confirmar</button>` : ''}
+                            </div>
+                        `;
+
+                                notifLista.appendChild(item);
+                            });
+                        }
+                    });
+            }
+
+            window.marcarLeida = function(id) {
+                fetch(`<?= base_url('admin/notificaciones/marcar-leida') ?>/${id}`, {
+                    method: 'POST'
+                }).then(() => cargarNotificaciones());
+            }
+
+            document.getElementById('notificacionesBtn').addEventListener('click', cargarNotificaciones);
+        });
+    </script>
+
 </body>
 
 </html>
