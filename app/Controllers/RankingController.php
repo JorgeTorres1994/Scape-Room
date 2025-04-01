@@ -60,7 +60,13 @@ class RankingController extends BaseController
         $data = [
             'equipo_id' => $this->request->getPost('equipo_id'),
             'sala_id'   => $this->request->getPost('sala_id'),
-            'tiempo'    => $this->request->getPost('tiempo'),
+            'tiempo' => sprintf(
+                '%02d:%02d:%02d',
+                (int) $this->request->getPost('hora'),
+                (int) $this->request->getPost('minuto'),
+                (int) $this->request->getPost('segundo')
+            ),
+
             'fecha'     => $this->request->getPost('fecha'),
         ];
 
@@ -68,5 +74,40 @@ class RankingController extends BaseController
 
         return redirect()->to(base_url('admin/ranking'))
             ->with('success', 'Ranking actualizado correctamente.');
+    }
+
+    public function actualizarRanking($id)
+    {
+        $rankingModel = new \App\Models\RankingModel();
+
+        // Obtener datos desde JSON
+        $data = $this->request->getJSON(true);
+
+        if (!$data) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'Datos JSON no proporcionados.'
+            ]);
+        }
+
+        // Validación básica
+        $required = ['equipo_id', 'sala_id', 'tiempo'];
+        foreach ($required as $campo) {
+            if (!isset($data[$campo])) {
+                return $this->response->setStatusCode(400)->setJSON([
+                    'error' => "Falta el campo obligatorio: $campo"
+                ]);
+            }
+        }
+
+        $rankingModel->update($id, [
+            'equipo_id' => $data['equipo_id'],
+            'sala_id'   => $data['sala_id'],
+            'tiempo'    => $data['tiempo'],
+        ]);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'mensaje' => 'Ranking actualizado vía API JSON.'
+        ]);
     }
 }

@@ -15,6 +15,13 @@ $routes->get('/admin/equipos', 'EquipoController::equipos');       // Vista de t
 $routes->get('/admin/equipos/crear', 'EquipoController::crear');   // Formulario
 $routes->post('/admin/equipos/guardar', 'EquipoController::guardar'); // Guardar
 $routes->get('/admin/equipos/obtenerEquipos', 'EquipoController::obtenerEquipos');     // JSON dinámico
+$routes->post('/admin/equipos/crear', 'EquipoController::crearEquipos');// JSON dinámico
+
+$routes->post('/prueba', function () {
+    log_message('error', '✅ Entró a /prueba');
+    return \Config\Services::response()->setJSON(['mensaje' => 'Ruta de prueba funciona']);
+});
+
 
 $routes->get('/admin/clientes', 'ClienteController::clientes');
 
@@ -25,6 +32,7 @@ $routes->get('admin/ranking', 'RankingController::ranking'); // Vista completa
 $routes->get('admin/ranking/obtener', 'RankingController::obtener'); // JSON
 $routes->get('admin/ranking/editar/(:num)', 'RankingController::editar/$1'); // Formulario
 $routes->post('admin/ranking/actualizar/(:num)', 'RankingController::actualizar/$1'); // Guardado
+$routes->put('admin/ranking/actualizar/(:num)', 'RankingController::actualizarRanking/$1'); //JSON
 
 // Vistas y DataTables
 $routes->get('/admin/reservas', 'ReservaController::reservas'); // Vista principal (listado)

@@ -77,4 +77,55 @@ class EquipoController extends BaseController
         $jsonPath = WRITEPATH . 'equipos.json';
         file_put_contents($jsonPath, json_encode($equipos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
+
+    public function crearEquipos()
+    {
+        log_message('error', '✅ Entró al método crearEquipos');
+
+        $json = $this->request->getJSON(true);
+        log_message('error', '📦 Datos recibidos: ' . json_encode($json));
+
+        if (!$json || empty($json['nombre'])) {
+            log_message('error', '❌ Nombre no proporcionado');
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'Nombre del equipo es requerido'
+            ]);
+        }
+
+        $equipoModel = new \App\Models\EquipoModel();
+        $equipoModel->insert(['nombre' => $json['nombre']]);
+
+        log_message('error', '✅ Equipo insertado exitosamente');
+
+        return $this->response->setJSON([
+            'success' => true,
+            'mensaje' => 'Equipo creado correctamente'
+        ]);
+    }
+
+
+    /*public function crearEquipos()
+    {
+        log_message('error', '🛠️ Entrando al método crearEquipos');
+
+        // Luego continúa como antes
+        $data = $this->request->getJSON(true);
+
+        if (!$data || !isset($data['nombre'])) {
+            log_message('error', '❌ Datos inválidos');
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'El campo "nombre" es obligatorio.'
+            ]);
+        }
+
+        log_message('error', '✅ Datos recibidos: ' . json_encode($data));
+
+        $equipoModel = new \App\Models\EquipoModel();
+        $equipoModel->insert(['nombre' => $data['nombre']]);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'mensaje' => 'Equipo creado correctamente.'
+        ]);
+    }*/
 }
