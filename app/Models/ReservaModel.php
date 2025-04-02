@@ -6,10 +6,24 @@ use CodeIgniter\Model;
 
 class ReservaModel extends Model
 {
-    protected $table            = 'reserva';
-    protected $primaryKey       = 'id';
-    protected $allowedFields    = ['cliente_id', 'sala_id', 'horario_id', 'fecha', 'cantidad_jugadores', 'estado'];
-    protected $returnType       = 'array';
-    protected $useTimestamps    = false;
-    protected $createdField     = 'created_at';
+    protected $table         = 'reserva';
+    protected $primaryKey    = 'id';
+    protected $returnType    = 'array';
+
+    protected $allowedFields = [
+        'cliente',
+        'correo',
+        'telefono',
+        'sala_id',
+        'horario_id',
+        'fecha',
+        'cantidad_jugadores',
+        'estado',
+        'metodo_pago',
+        'precio_total',
+        'created_at'
+    ];
+
+    protected $useTimestamps = false; // Tu tabla ya maneja created_at por default
+    protected $createdField  = 'created_at';
 }

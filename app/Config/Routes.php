@@ -44,8 +44,5 @@ $routes->post('/admin/reservas/guardar', 'ReservaController::guardar'); // Formu
 
 // Editar reserva
 $routes->get('/admin/reservas/editar/(:num)', 'ReservaController::editar/$1'); // Formulario web
-$routes->post('/admin/reservas/actualizar/(:num)', 'ReservaController::actualizar/$1'); // Web o JSON POST
-
-// Notificaciones
-$routes->get('/admin/notificaciones', 'NotificacionController::obtener');
-$routes->post('/admin/notificaciones/marcar-leida/(:num)', 'NotificacionController::marcarLeida/$1');
+$routes->post('/admin/reservas/actualizar/(:num)', 'ReservaController::actualizar/$1');
+$routes->put('/admin/reservas/api/actualizar/(:num)', 'ReservaController::actualizarReservaAPI/$1');

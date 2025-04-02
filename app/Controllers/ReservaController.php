@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\ReservaModel;
-use App\Models\ClienteModel;
 use App\Models\HorarioModel;
 use App\Models\NotificacionModel;
 
@@ -19,11 +18,10 @@ class ReservaController extends BaseController
         $reservaModel = new ReservaModel();
 
         $reservas = $reservaModel
-            ->select('reserva.*, cliente.nombre_completo, sala.nombre AS sala_nombre, horario.hora')
-            ->join('cliente', 'cliente.id = reserva.cliente_id')
-            ->join('sala', 'sala.id = reserva.sala_id')
+            ->select('reserva.*, horario.hora, sala.nombre AS sala_nombre')
             ->join('horario', 'horario.id = reserva.horario_id')
-            ->orderBy('reserva.fecha', 'DESC')
+            ->join('sala', 'sala.id = horario.sala_id') // sala desde horario
+            ->orderBy('reserva.fecha', 'ASC')
             ->findAll();
 
         return $this->response->setJSON(['data' => $reservas]);
@@ -31,7 +29,7 @@ class ReservaController extends BaseController
 
     public function crear()
     {
-        $data = $this->request->getJSON(true); // array
+        $data = $this->request->getJSON(true);
 
         if (!$data || !isset($data['reserva'])) {
             return $this->response->setStatusCode(400)->setJSON([
@@ -41,24 +39,47 @@ class ReservaController extends BaseController
 
         $reservaData = $data['reserva'];
 
-        // Validación mínima
-        $camposObligatorios = ['cliente_id', 'sala_id', 'horario_id', 'fecha', 'cantidad_jugadores'];
+        $camposObligatorios = [
+            'cliente',
+            'correo',
+            'telefono',
+            'horario_id',
+            'fecha',
+            'cantidad_jugadores',
+            'metodo_pago',
+            'precio_total'
+        ];
+
         foreach ($camposObligatorios as $campo) {
-            if (empty($reservaData[$campo])) {
+            if (!isset($reservaData[$campo]) || $reservaData[$campo] === '') {
                 return $this->response->setStatusCode(400)->setJSON([
                     'error' => "Falta el campo obligatorio: $campo"
                 ]);
             }
         }
 
-        $reservaModel = new \App\Models\ReservaModel();
+        // Obtener sala_id desde el horario
+        $horarioModel = new HorarioModel();
+        $horario = $horarioModel->select('sala_id')->find($reservaData['horario_id']);
+
+        if (!$horario) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'Horario inválido o no encontrado.'
+            ]);
+        }
+
+        $reservaModel = new ReservaModel();
 
         $reserva = [
-            'cliente_id'          => $reservaData['cliente_id'],
-            'sala_id'             => $reservaData['sala_id'],
+            'cliente'             => $reservaData['cliente'],
+            'correo'              => $reservaData['correo'],
+            'telefono'            => $reservaData['telefono'],
+            'sala_id'             => $horario['sala_id'],
             'horario_id'          => $reservaData['horario_id'],
             'fecha'               => $reservaData['fecha'],
             'cantidad_jugadores' => $reservaData['cantidad_jugadores'],
+            'metodo_pago'         => $reservaData['metodo_pago'],
+            'precio_total'        => $reservaData['precio_total'],
             'estado'              => 'pendiente'
         ];
 
@@ -68,35 +89,52 @@ class ReservaController extends BaseController
             'success' => true,
             'mensaje' => 'Reserva registrada exitosamente'
         ]);
-
-        // Después de insertar la reserva...
-        $notificacionModel = new NotificacionModel();
-        $notificacionModel->insert([
-            'mensaje' => "Nueva reserva de cliente ID {$reserva['cliente_id']} para {$reserva['fecha']}",
-            'reserva_id' => $reservaModel->getInsertID(),
-            'leida' => 0
-        ]);
     }
 
+    public function actualizar($id)
+    {
+        $reservaModel = new ReservaModel();
+
+        $data = [
+            'cliente'             => $this->request->getPost('cliente'),
+            'correo'              => $this->request->getPost('correo'),
+            'telefono'            => $this->request->getPost('telefono'),
+            'horario_id'          => $this->request->getPost('horario_id'),
+            'fecha'               => $this->request->getPost('fecha'),
+            'cantidad_jugadores' => $this->request->getPost('cantidad_jugadores'),
+            'metodo_pago'         => $this->request->getPost('metodo_pago'),
+            'precio_total'        => $this->request->getPost('precio_total'),
+            'estado'              => $this->request->getPost('estado'),
+        ];
+
+        // Obtener sala_id según el horario
+        $horarioModel = new HorarioModel();
+        $horario = $horarioModel->select('sala_id')->find($data['horario_id']);
+
+        if (!$horario) {
+            return redirect()->back()->with('error', 'Horario inválido.');
+        }
+
+        $data['sala_id'] = $horario['sala_id'];
+
+        $reservaModel->update($id, $data);
+
+        return redirect()->to(base_url('admin/reservas'))
+            ->with('success', 'Reserva actualizada correctamente.');
+    }
 
     public function editar($id)
     {
         $reservaModel = new ReservaModel();
-        $clienteModel = new ClienteModel();
         $horarioModel = new HorarioModel();
 
-        $reserva = $reservaModel
-            ->select('reserva.id, reserva.cliente_id, reserva.horario_id, reserva.fecha, reserva.cantidad_jugadores, reserva.estado, cliente.nombre_completo, cliente.telefono, cliente.correo')
-
-            ->join('cliente', 'cliente.id = reserva.cliente_id')
-            ->find($id);
+        $reserva = $reservaModel->find($id);
 
         if (!$reserva) {
             return redirect()->to(base_url('admin/reservas'))->with('error', 'Reserva no encontrada.');
         }
 
-        $data['reserva']  = $reserva;
-        $data['clientes'] = $clienteModel->findAll();
+        $data['reserva'] = $reserva;
         $data['horarios'] = $horarioModel
             ->select('horario.*, sala.nombre as sala_nombre')
             ->join('sala', 'sala.id = horario.sala_id')
@@ -106,30 +144,30 @@ class ReservaController extends BaseController
         return view('admin/reservas_editar', $data);
     }
 
-    public function actualizar($id)
+    public function actualizarReservaAPI($id)
     {
         $reservaModel = new ReservaModel();
-
-        // Detectar si la solicitud es JSON
-        $isJson = $this->request->is('json');
-        $data = $isJson
-            ? $this->request->getJSON(true)['reserva'] ?? null
-            : $this->request->getPost();
+        $data = $this->request->getJSON(true)['reserva'] ?? null;
 
         if (!$data) {
             return $this->response->setStatusCode(400)->setJSON([
-                'error' => 'Datos no proporcionados.'
+                'error' => 'Datos JSON no proporcionados.'
             ]);
         }
 
-        // Validación mínima
-        $campos = ['cliente_id', 'horario_id', 'fecha', 'cantidad_jugadores', 'estado'];
+        $required = [
+            'cliente',
+            'correo',
+            'telefono',
+            'horario_id',
+            'fecha',
+            'cantidad_jugadores',
+            'metodo_pago',
+            'precio_total',
+            'estado'
+        ];
 
-        if ($this->request->is('json')) {
-            $campos[] = 'sala_id';
-        }
-
-        foreach ($campos as $campo) {
+        foreach ($required as $campo) {
             if (!isset($data[$campo])) {
                 return $this->response->setStatusCode(400)->setJSON([
                     'error' => "Falta el campo obligatorio: $campo"
@@ -137,18 +175,23 @@ class ReservaController extends BaseController
             }
         }
 
-        $reservaModel->update($id, $data);
+        // Obtener sala desde horario
+        $horarioModel = new HorarioModel();
+        $horario = $horarioModel->select('sala_id')->find($data['horario_id']);
 
-        // Si es JSON, responder JSON
-        if ($isJson) {
-            return $this->response->setJSON([
-                'success' => true,
-                'mensaje' => 'Reserva actualizada correctamente.'
+        if (!$horario) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'Horario inválido.'
             ]);
         }
 
-        // Si es formulario web, redirigir
-        return redirect()->to(base_url('admin/reservas'))
-            ->with('success', 'Reserva actualizada correctamente.');
+        $data['sala_id'] = $horario['sala_id'];
+
+        $reservaModel->update($id, $data);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'mensaje' => 'Reserva actualizada vía API'
+        ]);
     }
 }

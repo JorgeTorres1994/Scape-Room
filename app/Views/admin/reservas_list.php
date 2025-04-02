@@ -8,10 +8,15 @@
         <thead class="table-primary">
             <tr>
                 <th>Cliente</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
                 <th>Sala</th>
                 <th>Hora</th>
-                <th>Jugadores</th>
+                <th># Jug</th>
                 <th>Estado</th>
+                <th>Método Pago</th>
+                <th>Precio Total</th>
+                <th>Fecha Servicio</th>
                 <th>Fecha Registro</th>
                 <th>Acciones</th>
             </tr>
@@ -50,27 +55,22 @@
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#reservasTable').DataTable({
             ajax: {
                 url: '<?= base_url("admin/reservas/obtener") ?>',
                 dataSrc: 'data'
             },
-            columns: [{
-                    data: 'nombre_completo'
-                },
-                {
-                    data: 'sala_nombre'
-                },
-                {
-                    data: 'hora'
-                },
-                {
-                    data: 'cantidad_jugadores'
-                },
+            columns: [
+                { data: 'cliente' },
+                { data: 'correo' },
+                { data: 'telefono' },
+                { data: 'sala_nombre' },
+                { data: 'hora' },
+                { data: 'cantidad_jugadores' },
                 {
                     data: 'estado',
-                    render: function(data) {
+                    render: function (data) {
                         if (data === 'pendiente') {
                             return '<span class="badge bg-warning text-dark">Pendiente</span>';
                         } else if (data === 'confirmada') {
@@ -83,11 +83,26 @@
                     }
                 },
                 {
-                    data: 'fecha'
+                    data: 'metodo_pago',
+                    render: function (data) {
+                        if (data === 'yape') {
+                            return '<span class="badge bg-secondary">Yape</span>';
+                        } else if (data === 'plin') {
+                            return '<span class="badge bg-primary">Plin</span>';
+                        } else {
+                            return '<span class="badge bg-info">Transferencia</span>';
+                        }
+                    }
                 },
                 {
+                    data: 'precio_total',
+                    render: $.fn.dataTable.render.number(',', '.', 2, 'S/')
+                },
+                { data: 'fecha' },
+                { data: 'created_at' },
+                {
                     data: 'id',
-                    render: function(data, type, row) {
+                    render: function (data) {
                         return `<a href="<?= base_url('admin/reservas/editar/') ?>${data}" class="btn btn-sm btn-warning">Editar</a>`;
                     },
                     orderable: false,
