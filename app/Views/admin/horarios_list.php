@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<h2 class="text-center my-4">Horarios por Sala</h2>
+<h2 class="text-center my-4">Listado de Horarios</h2>
 
 <div class="table-responsive">
     <table id="horariosTable" class="table table-light table-hover text-center align-middle shadow-sm rounded">
@@ -9,7 +9,6 @@
             <tr>
                 <th>Sala</th>
                 <th>Hora</th>
-                <th>Activo</th>
             </tr>
         </thead>
         <tbody>
@@ -17,9 +16,6 @@
                 <tr>
                     <td><?= esc($horario['sala_nombre']) ?></td>
                     <td><?= date('H:i', strtotime($horario['hora'])) ?></td>
-                    <td>
-                        <?= $horario['activo'] ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-secondary">No</span>' ?>
-                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -72,12 +68,6 @@
                 {
                     data: 'hora',
                     render: data => data.substring(0, 5)
-                },
-                {
-                    data: 'activo',
-                    render: data => data == 1 ?
-                        '<span class="badge bg-success">Sí</span>' :
-                        '<span class="badge bg-secondary">No</span>'
                 }
             ],
             language: {

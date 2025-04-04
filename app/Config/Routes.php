@@ -27,6 +27,11 @@ $routes->get('/admin/clientes', 'ClienteController::clientes');
 
 $routes->get('/admin/horarios', 'HorarioController::horarios');
 $routes->get('/admin/horarios/obtener', 'HorarioController::obtener'); // JSON para DataTables
+$routes->get('/admin/horarios/disponibles', 'HorarioController::horariosDisponibles');
+//routes->get('/admin/fechas-disponibles', 'HorarioController::fechasDisponibles');
+$routes->get('/admin/horarios/fechas-ocupadas', 'HorarioController::fechasOcupadas');
+$routes->get('/admin/horarios/disponibles-vista', 'HorarioController::vistaHorariosDisponibles');
+
 
 $routes->get('admin/ranking', 'RankingController::ranking'); // Vista completa
 $routes->get('admin/ranking/obtener', 'RankingController::obtener'); // JSON
@@ -41,6 +46,7 @@ $routes->get('/admin/reservas/obtener', 'ReservaController::obtenerReservas'); /
 // Crear nueva reserva
 $routes->post('/admin/reservas/crear', 'ReservaController::crear'); // JSON desde frontend o API (Postman)
 $routes->post('/admin/reservas/guardar', 'ReservaController::guardar'); // Formulario clásico (web)
+
 
 // Editar reserva
 $routes->get('/admin/reservas/editar/(:num)', 'ReservaController::editar/$1'); // Formulario web

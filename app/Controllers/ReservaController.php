@@ -8,12 +8,20 @@ use App\Models\NotificacionModel;
 
 class ReservaController extends BaseController
 {
-    public function reservas()
+    /*public function reservas()
     {
         return view('admin/reservas_list');
+    }*/
+
+    public function reservas()
+    {
+        $salaModel = new \App\Models\SalaModel();
+        $salas = $salaModel->findAll();
+        return view('admin/reservas_list', ['salas' => $salas]);
     }
 
-    public function obtenerReservas()
+
+    /*public function obtenerReservas()
     {
         $reservaModel = new ReservaModel();
 
@@ -25,7 +33,34 @@ class ReservaController extends BaseController
             ->findAll();
 
         return $this->response->setJSON(['data' => $reservas]);
+    }*/
+
+    public function obtenerReservas()
+    {
+        $reservaModel = new ReservaModel();
+
+        $salaId = $this->request->getGet('sala_id');
+        $fecha  = $this->request->getGet('fecha');
+
+        $reservaModel
+            ->select('reserva.*, horario.hora, sala.nombre AS sala_nombre')
+            ->join('horario', 'horario.id = reserva.horario_id')
+            ->join('sala', 'sala.id = horario.sala_id')
+            ->orderBy('reserva.fecha', 'ASC');
+
+        if ($salaId) {
+            $reservaModel->where('sala.id', $salaId);
+        }
+
+        if ($fecha) {
+            $reservaModel->where('reserva.fecha', $fecha);
+        }
+
+        $reservas = $reservaModel->findAll();
+
+        return $this->response->setJSON(['data' => $reservas]);
     }
+
 
     public function crear()
     {
@@ -138,7 +173,6 @@ class ReservaController extends BaseController
         $data['horarios'] = $horarioModel
             ->select('horario.*, sala.nombre as sala_nombre')
             ->join('sala', 'sala.id = horario.sala_id')
-            ->where('activo', 1)
             ->findAll();
 
         return view('admin/reservas_editar', $data);
