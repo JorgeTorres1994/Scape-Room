@@ -8,32 +8,12 @@ use App\Models\NotificacionModel;
 
 class ReservaController extends BaseController
 {
-    /*public function reservas()
-    {
-        return view('admin/reservas_list');
-    }*/
-
     public function reservas()
     {
         $salaModel = new \App\Models\SalaModel();
         $salas = $salaModel->findAll();
         return view('admin/reservas_list', ['salas' => $salas]);
     }
-
-
-    /*public function obtenerReservas()
-    {
-        $reservaModel = new ReservaModel();
-
-        $reservas = $reservaModel
-            ->select('reserva.*, horario.hora, sala.nombre AS sala_nombre')
-            ->join('horario', 'horario.id = reserva.horario_id')
-            ->join('sala', 'sala.id = horario.sala_id') // sala desde horario
-            ->orderBy('reserva.fecha', 'ASC')
-            ->findAll();
-
-        return $this->response->setJSON(['data' => $reservas]);
-    }*/
 
     public function obtenerReservas()
     {
