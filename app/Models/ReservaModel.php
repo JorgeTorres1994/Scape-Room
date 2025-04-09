@@ -21,7 +21,8 @@ class ReservaModel extends Model
         'estado',
         'metodo_pago',
         'precio_total',
-        'created_at'
+        'created_at', 
+        'activo'
     ];
 
     protected $useTimestamps = false; // Tu tabla ya maneja created_at por default

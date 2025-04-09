@@ -7,6 +7,11 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+$routes->get('/login', 'AuthController::index');
+$routes->post('/login', 'AuthController::login');
+$routes->get('/logout', 'AuthController::logout');
+
+
 $routes->get('/admin/dashboard', 'AdminController::dashboard');
 
 $routes->get('/admin/salas', 'SalasController::salas');
@@ -52,3 +57,6 @@ $routes->post('/admin/reservas/guardar', 'ReservaController::guardar'); // Formu
 $routes->get('/admin/reservas/editar/(:num)', 'ReservaController::editar/$1'); // Formulario web
 $routes->post('/admin/reservas/actualizar/(:num)', 'ReservaController::actualizar/$1');
 $routes->put('/admin/reservas/api/actualizar/(:num)', 'ReservaController::actualizarReservaAPI/$1');
+
+$routes->post('admin/reservas/toggle-activo/(:num)', 'ReservaController::toggleActivo/$1');
+

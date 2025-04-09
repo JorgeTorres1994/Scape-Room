@@ -66,8 +66,8 @@ class RankingController extends BaseController
                 (int) $this->request->getPost('minuto'),
                 (int) $this->request->getPost('segundo')
             ),
-
             'fecha'     => $this->request->getPost('fecha'),
+            'puntaje'   => $this->request->getPost('puntaje'),
         ];
 
         $rankingModel->update($id, $data);
@@ -90,7 +90,7 @@ class RankingController extends BaseController
         }
 
         // Validación básica
-        $required = ['equipo_id', 'sala_id', 'tiempo'];
+        $required = ['equipo_id', 'sala_id', 'tiempo', 'puntaje'];
         foreach ($required as $campo) {
             if (!isset($data[$campo])) {
                 return $this->response->setStatusCode(400)->setJSON([
@@ -103,6 +103,7 @@ class RankingController extends BaseController
             'equipo_id' => $data['equipo_id'],
             'sala_id'   => $data['sala_id'],
             'tiempo'    => $data['tiempo'],
+            'puntaje'   => $data['puntaje'],
         ]);
 
         return $this->response->setJSON([

@@ -18,7 +18,7 @@
     ?>
 
     <div class="sidebar" id="sidebar">
-        <div class="menu-toggle sidebar-toggle" onclick="toggleMenu()">
+        <div class="menu-toggle" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
         <!-- Logo y nombre -->
@@ -30,7 +30,6 @@
         <a href="<?= base_url('/admin/dashboard') ?>"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
         <a href="<?= base_url('/admin/equipos') ?>"><i class="fas fa-users"></i> <span>Equipos</span></a>
         <a href="<?= base_url('/admin/salas') ?>"><i class="fas fa-door-open"></i> <span>Salas</span></a>
-        <a href="<?= base_url('/admin/clientes') ?>"><i class="fas fa-users"></i> <span>Clientes</span></a>
         <a href="<?= base_url('/admin/horarios') ?>"><i class="fas fa-clock"></i> <span>Horarios</span></a>
         <a href="<?= base_url('/admin/horarios/disponibles-vista') ?>"><i class="fas fa-clock"></i> <span>Horarios Disponibles</span></a>
         <a href="<?= base_url('/admin/reservas') ?>"><i class="fas fa-calendar-check"></i> <span>Reservas</span></a>
@@ -76,9 +75,13 @@
     </script>
 
     <script>
-        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('collapsed');
-        });
+        // Ensure the element exists before adding the event listener
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('collapsed');
+            });
+        }
     </script>
 
 </body>

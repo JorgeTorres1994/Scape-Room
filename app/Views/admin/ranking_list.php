@@ -9,6 +9,7 @@
             <tr>
                 <th>Equipo</th>
                 <th>Sala</th>
+                <th>Puntaje</th>
                 <th>Tiempo</th>
                 <th>Fecha Registro</th>
                 <th>Acciones</th>
@@ -59,6 +60,7 @@
             columns: [
                 { data: 'equipo_nombre' },
                 { data: 'sala_nombre' },
+                { data: 'puntaje' },
                 { data: 'tiempo' },
                 {
                     data: 'registrado_en',

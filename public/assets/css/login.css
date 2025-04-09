@@ -1,0 +1,98 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px; /* reduce para subir todo */
+}
+
+
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-wrapper {
+    margin-bottom: 150px;
+    text-align: center;
+}
+
+.logo-wrapper img {
+    width: 450px;
+}
+
+.login-card {
+    background-color: #222;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #e69c3f;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin-top: -20px;
+}
+
+.neon-title {
+    color: #e69c3f;
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-shadow: 0 0 8px #e69c3f;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #ccc;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.login-form input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    border-radius: 6px;
+    border: none;
+    background: #e0ecff;
+    font-size: 1rem;
+}
+
+.login-form button {
+    background-color: #e69c3f;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    width: 90%;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.login-form button:hover {
+    background-color: #d48a2b;
+}
+
+@media (max-width: 500px) {
+    .login-card {
+        padding: 25px 20px;
+        max-width: 90%;
+    }
+
+    .logo-wrapper img {
+        width: 120px;
+    }
+
+    .login-form input,
+    .login-form button {
+        width: 100%;
+    }
+}

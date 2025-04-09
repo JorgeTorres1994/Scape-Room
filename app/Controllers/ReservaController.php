@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\ReservaModel;
 use App\Models\HorarioModel;
-use App\Models\NotificacionModel;
 
 class ReservaController extends BaseController
 {
@@ -207,5 +206,36 @@ class ReservaController extends BaseController
             'success' => true,
             'mensaje' => 'Reserva actualizada vía API'
         ]);
+    }
+    /*public function toggleEstado($id)
+    {
+        $reservaModel = new \App\Models\ReservaModel();
+        $data = $this->request->getJSON(true)['reserva'] ?? null;
+
+        if (!$data || !isset($data['activo'])) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Estado no enviado']);
+        }
+
+        $reservaModel->update($id, ['activo' => (int)$data['activo']]);
+
+        return $this->response->setJSON(['success' => true]);
+    }*/
+
+    public function toggleActivo($id)
+    {
+        $json = $this->request->getJSON(true);
+        $estado = $json['reserva']['activo'] ?? null;
+
+        if (!isset($estado)) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'success' => false,
+                'message' => 'Campo "activo" no proporcionado.'
+            ]);
+        }
+
+        $reservaModel = new \App\Models\ReservaModel();
+        $reservaModel->update($id, ['activo' => (int) $estado]);
+
+        return $this->response->setJSON(['success' => true]);
     }
 }

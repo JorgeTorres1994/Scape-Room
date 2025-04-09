@@ -43,8 +43,13 @@
                         </select>
                     </div>
 
-                    <!-- Tiempo -->
+                    <!-- Puntaje -->
+                    <div class="mb-3">
+                        <label for="puntaje" class="form-label fw-semibold">Puntaje</label>
+                        <input type="number" name="puntaje" id="puntaje" class="form-control form-control-lg" value="<?= esc($ranking['puntaje']) ?>" required>
+                    </div>
 
+                    <!-- Tiempo -->
                     <?php
                     [$hh, $mm, $ss] = explode(':', $ranking['tiempo']);
                     ?>

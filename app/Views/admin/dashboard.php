@@ -1,12 +1,12 @@
 <?= $this->extend('layouts/admin') ?>
-
 <?= $this->section('content') ?>
+
 <h2 class="text-center my-4">Dashboard - Panel de Control</h2>
 
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center text-white">
         <div class="col-md-2">
-            <div class="card bg-primary text-white text-center card-dashboard">
+            <div class="card bg-primary text-center card-dashboard">
                 <div class="card-body">
                     <h3><?= $totalSalas ?></h3>
                     <p>Salas Activas</p>
@@ -14,59 +14,72 @@
             </div>
         </div>
 
-        <!-- <div class="col-md-2">
-            <div class="card bg-success text-white text-center card-dashboard">
+        <div class="col-md-2">
+            <div class="card bg-success text-center card-dashboard">
                 <div class="card-body">
-                    <h3><= $totalReservas ?></h3>
-                    <p>Reservas Totales</p>
+                    <h3><?= $totalReservas ?></h3>
+                    <p>Reservas Realizadas</p>
                 </div>
             </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="col-md-2">
-            <div class="card bg-info text-white text-center card-dashboard">
+        <div class="col-md-2">
+            <div class="card bg-info text-center card-dashboard">
                 <div class="card-body">
-                    <h3><= $totalUsuarios ?></h3>
-                    <p>Usuarios Registrados</p>
+                    <h3><?= $totalClientes ?></h3>
+                    <p>Clientes</p>
                 </div>
             </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="col-md-2">
+        <div class="col-md-2">
             <div class="card bg-warning text-dark text-center card-dashboard">
                 <div class="card-body">
-                    <h3><= $totalCalificaciones ?></h3>
-                    <p>Calificaciones Totales</p>
+                    <h3><?= $totalEquipos ?></h3>
+                    <p>Equipos</p>
                 </div>
             </div>
-        </div> -->
+        </div>
 
-       <!-- <div class="col-md-2">
-            <div class="card bg-danger text-white text-center card-dashboard">
+        <div class="col-md-2">
+            <div class="card bg-danger text-center card-dashboard">
                 <div class="card-body">
-                    <h3><= $promedioCalificaciones ?></h3>
-                    <p>Prom. Calificación</p>
+                    <h3><?= $totalRankings ?></h3>
+                    <p>Rankings</p>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 </div>
 
-<h3 class="mt-5 text-center">Reservas por Mes</h3>
-<canvas id="chartReservas"></canvas>
+<h3 class="mt-5 text-center">📊 Reservas por Mes</h3>
+<canvas id="chartReservas" height="100"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('chartReservas').getContext('2d');
-    var chart = new Chart(ctx, {
+    const ctx = document.getElementById('chartReservas').getContext('2d');
+    const chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+            labels: <?= json_encode($labels) ?>,
             datasets: [{
                 label: 'Reservas Realizadas',
-                data: [12, 19, 8, 15, 20], // Puedes reemplazar por datos reales
-                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                data: <?= json_encode($valores) ?>,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
             }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
         }
     });
 </script>
@@ -81,7 +94,6 @@
         font-size: 16px;
         font-weight: bold;
         border-radius: 10px;
-        color: white;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         margin-bottom: 15px;
     }
