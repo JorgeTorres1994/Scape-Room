@@ -207,19 +207,6 @@ class ReservaController extends BaseController
             'mensaje' => 'Reserva actualizada vía API'
         ]);
     }
-    /*public function toggleEstado($id)
-    {
-        $reservaModel = new \App\Models\ReservaModel();
-        $data = $this->request->getJSON(true)['reserva'] ?? null;
-
-        if (!$data || !isset($data['activo'])) {
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'Estado no enviado']);
-        }
-
-        $reservaModel->update($id, ['activo' => (int)$data['activo']]);
-
-        return $this->response->setJSON(['success' => true]);
-    }*/
 
     public function toggleActivo($id)
     {

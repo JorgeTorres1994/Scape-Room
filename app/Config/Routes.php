@@ -44,6 +44,9 @@ $routes->get('admin/ranking/editar/(:num)', 'RankingController::editar/$1'); // 
 $routes->post('admin/ranking/actualizar/(:num)', 'RankingController::actualizar/$1'); // Guardado
 $routes->put('admin/ranking/actualizar/(:num)', 'RankingController::actualizarRanking/$1'); //JSON
 
+$routes->post('admin/ranking/api/crear', 'RankingController::crearRankingAPI');
+
+
 // Vistas y DataTables
 $routes->get('/admin/reservas', 'ReservaController::reservas'); // Vista principal (listado)
 $routes->get('/admin/reservas/obtener', 'ReservaController::obtenerReservas'); // JSON para DataTables

@@ -111,4 +111,42 @@ class RankingController extends BaseController
             'mensaje' => 'Ranking actualizado vía API JSON.'
         ]);
     }
+
+    public function crearRankingAPI()
+    {
+        $data = $this->request->getJSON(true);
+
+        if (!$data || !isset($data['nombre_equipo'], $data['sala_id'], $data['tiempo'], $data['fecha'])) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'Faltan campos requeridos: nombre_equipo, sala_id, tiempo, fecha.'
+            ]);
+        }
+
+        $equipoModel = new \App\Models\EquipoModel();
+        $rankingModel = new \App\Models\RankingModel();
+
+        // Crear equipo
+        $equipoId = $equipoModel->insert([
+            'nombre' => $data['nombre_equipo'],
+            'estado' => 'activo'
+        ], true); // true => get insertID
+
+        // Generar código aleatorio
+        $codigo = 'EQP-' . strtoupper(substr(md5(uniqid()), 0, 5));
+
+        // Registrar ranking
+        $rankingModel->insert([
+            'equipo_id' => $equipoId,
+            'sala_id' => $data['sala_id'],
+            'tiempo' => $data['tiempo'],
+            'fecha' => $data['fecha'],
+            'codigo' => $codigo
+        ]);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'mensaje' => 'Ranking y equipo registrados correctamente.',
+            'codigo_generado' => $codigo
+        ]);
+    }
 }

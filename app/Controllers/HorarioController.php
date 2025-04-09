@@ -64,6 +64,7 @@ class HorarioController extends BaseController
             ->select('horario_id')
             ->where('fecha', $fecha)
             ->where('sala_id', $salaId)
+            ->where('activo', 1)
             ->findColumn('horario_id');
 
         return $this->response->setJSON([
