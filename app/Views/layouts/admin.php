@@ -28,13 +28,13 @@
         </div>
 
         <a href="<?= base_url('/admin/dashboard') ?>"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
+        <a href="<?= base_url('/admin/integrantes') ?>"><i class="fas fa-user"></i> <span>Integrantes</span></a>
         <a href="<?= base_url('/admin/equipos') ?>"><i class="fas fa-users"></i> <span>Equipos</span></a>
         <a href="<?= base_url('/admin/salas') ?>"><i class="fas fa-door-open"></i> <span>Salas</span></a>
         <a href="<?= base_url('/admin/horarios') ?>"><i class="fas fa-clock"></i> <span>Horarios</span></a>
         <a href="<?= base_url('/admin/horarios/disponibles-vista') ?>"><i class="fas fa-clock"></i> <span>Horarios Disponibles</span></a>
         <a href="<?= base_url('/admin/reservas') ?>"><i class="fas fa-calendar-check"></i> <span>Reservas</span></a>
         <a href="<?= base_url('/admin/ranking') ?>"><i class="fas fa-star"></i> <span>Rankings</span></a>
-        <a href="<?= base_url('/admin/usuarios') ?>"><i class="fas fa-user"></i> <span>Usuarios</span></a>
     </div>
 
     <div class="content">

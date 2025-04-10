@@ -49,37 +49,13 @@
                         <input type="number" name="puntaje" id="puntaje" class="form-control form-control-lg" value="<?= esc($ranking['puntaje']) ?>" required>
                     </div>
 
-                    <!-- Tiempo -->
-                    <?php
-                    [$hh, $mm, $ss] = explode(':', $ranking['tiempo']);
-                    ?>
-
+                    <!-- Tiempo (minutos) -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Tiempo (hh:mm:ss)</label>
-                        <div class="d-flex gap-2">
-                            <select name="hora" class="form-select" required>
-                                <?php for ($h = 0; $h < 24; $h++): ?>
-                                    <option value="<?= sprintf('%02d', $h) ?>" <?= $hh == sprintf('%02d', $h) ? 'selected' : '' ?>>
-                                        <?= sprintf('%02d', $h) ?>
-                                    </option>
-                                <?php endfor; ?>
-                            </select>
-                            <select name="minuto" class="form-select" required>
-                                <?php for ($m = 0; $m < 60; $m++): ?>
-                                    <option value="<?= sprintf('%02d', $m) ?>" <?= $mm == sprintf('%02d', $m) ? 'selected' : '' ?>>
-                                        <?= sprintf('%02d', $m) ?>
-                                    </option>
-                                <?php endfor; ?>
-                            </select>
-                            <select name="segundo" class="form-select" required>
-                                <?php for ($s = 0; $s < 60; $s++): ?>
-                                    <option value="<?= sprintf('%02d', $s) ?>" <?= $ss == sprintf('%02d', $s) ? 'selected' : '' ?>>
-                                        <?= sprintf('%02d', $s) ?>
-                                    </option>
-                                <?php endfor; ?>
-                            </select>
-                        </div>
+                        <label for="tiempo" class="form-label fw-semibold">Tiempo (minutos)</label>
+                        <input type="number" name="tiempo" id="tiempo" class="form-control form-control-lg"
+                            value="<?= esc($ranking['tiempo']) ?>" required min="1">
                     </div>
+
 
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success btn-lg rounded-3">Guardar Cambios</button>

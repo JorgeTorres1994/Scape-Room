@@ -9,14 +9,18 @@
     <table id="equiposTable" class="table table-light table-hover text-center align-middle shadow-sm rounded">
         <thead class="table-primary">
             <tr>
-                <th>Nombre del Equipo</th>
-                <th>Fecha de Registro</th>
+                <th>Nombre</th>
+                <th># Integrantes</th>
+                <th>Código</th>
+                <th>Fecha Registro</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($equipos as $equipo): ?>
                 <tr>
                     <td><?= esc($equipo['nombre']) ?></td>
+                    <td><?= esc($equipo['cantidad_integrantes']) ?></td>
+                    <td><?= esc($equipo['codigo']) ?></td>
                     <td><?= date('d/m/Y H:i', strtotime($equipo['creado_en'])) ?></td>
                 </tr>
             <?php endforeach; ?>

@@ -9,7 +9,7 @@ class EquipoModel extends Model
     protected $table      = 'equipo';
     protected $primaryKey = 'id';
 
-    protected $allowedFields = ['nombre'];
+    protected $allowedFields = ['nombre', 'cantidad_integrantes', 'codigo'];
     protected $returnType    = 'array';
     protected $useTimestamps = true;
     protected $createdField  = 'creado_en';

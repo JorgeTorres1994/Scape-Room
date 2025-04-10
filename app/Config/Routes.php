@@ -16,6 +16,8 @@ $routes->get('/admin/dashboard', 'AdminController::dashboard');
 
 $routes->get('/admin/salas', 'SalasController::salas');
 
+$routes->get('/admin/integrantes', 'IntegranteController::integrantes');
+
 $routes->get('/admin/equipos', 'EquipoController::equipos');       // Vista de tabla
 $routes->get('/admin/equipos/crear', 'EquipoController::crear');   // Formulario
 $routes->post('/admin/equipos/guardar', 'EquipoController::guardar'); // Guardar

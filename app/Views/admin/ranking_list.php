@@ -10,7 +10,6 @@
                 <th>Equipo</th>
                 <th>Sala</th>
                 <th>Puntaje</th>
-                <th>Codigo</th>
                 <th>Tiempo</th>
                 <th>Fecha Registro</th>
                 <th>Acciones</th>
@@ -52,18 +51,34 @@
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#rankingTable').DataTable({
             ajax: {
                 url: "<?= base_url('admin/ranking/obtener') ?>",
                 dataSrc: 'data'
             },
-            columns: [
-                { data: 'equipo_nombre' },
-                { data: 'sala_nombre' },
-                { data: 'puntaje' },
-                { data: 'codigo' },
-                { data: 'tiempo' },
+            columns: [{
+                    data: 'equipo_nombre'
+                },
+                {
+                    data: 'sala_nombre'
+                },
+                {
+                    data: 'puntaje'
+                },
+                {
+                    data: 'tiempo',
+                    render: function(data) {
+                        if (typeof data === 'string' && data.includes(':')) {
+                            const parts = data.split(':');
+                            if (parts.length === 3) {
+                                return (parseInt(parts[0]) * 60 + parseInt(parts[1])) + ' minutos';
+                            }
+                        }
+                        return `${parseInt(data)} minutos`;
+                    }
+                },
+
                 {
                     data: 'registrado_en',
                     render: data => {
@@ -73,12 +88,14 @@
                 },
                 {
                     data: 'id',
-                    render: function (data) {
+                    render: function(data) {
                         return `<a href="<?= base_url('admin/ranking/editar/') ?>${data}" class="btn btn-sm btn-warning">Editar</a>`;
                     }
                 }
             ],
-            order: [[3, 'desc']], // orden por fecha descendente
+            order: [
+                [4, 'desc']
+            ], // orden por fecha descendente
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
                 zeroRecords: "No se encontraron rankings",
@@ -96,5 +113,6 @@
         });
     });
 </script>
+
 
 <?= $this->endSection() ?>
