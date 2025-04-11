@@ -56,6 +56,12 @@
                             value="<?= esc($ranking['tiempo']) ?>" required min="1">
                     </div>
 
+                    <!-- Cantidad de Integrantes -->
+                    <div class="mb-3">
+                        <label for="cantidad_integrantes" class="form-label fw-semibold">Cantidad de Integrantes</label>
+                        <input type="number" name="cantidad_integrantes" id="cantidad_integrantes" class="form-control form-control-lg"
+                            value="<?= esc($ranking['cantidad_integrantes'] ?? '') ?>" required min="1">
+                    </div>
 
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success btn-lg rounded-3">Guardar Cambios</button>

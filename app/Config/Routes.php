@@ -24,11 +24,7 @@ $routes->post('/admin/equipos/guardar', 'EquipoController::guardar'); // Guardar
 $routes->get('/admin/equipos/obtenerEquipos', 'EquipoController::obtenerEquipos');     // JSON dinámico
 $routes->post('/admin/equipos/crear', 'EquipoController::crearEquipos');// JSON dinámico
 
-$routes->post('/prueba', function () {
-    log_message('error', '✅ Entró a /prueba');
-    return \Config\Services::response()->setJSON(['mensaje' => 'Ruta de prueba funciona']);
-});
-
+$routes->post('/admin/equipos/crear', 'EquipoController::crearEquipos');// JSON dinámico 
 
 $routes->get('/admin/clientes', 'ClienteController::clientes');
 
@@ -47,7 +43,7 @@ $routes->post('admin/ranking/actualizar/(:num)', 'RankingController::actualizar/
 $routes->put('admin/ranking/actualizar/(:num)', 'RankingController::actualizarRanking/$1'); //JSON
 
 $routes->post('admin/ranking/api/crear', 'RankingController::crearRankingAPI');
-
+$routes->post('/admin/ranking/registrar-resultado', 'RankingController::registrarResultado');
 
 // Vistas y DataTables
 $routes->get('/admin/reservas', 'ReservaController::reservas'); // Vista principal (listado)

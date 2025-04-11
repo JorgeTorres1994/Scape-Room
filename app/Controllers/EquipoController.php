@@ -40,7 +40,7 @@ class EquipoController extends BaseController
         $codigo = strtoupper(random_string('alnum', rand(8, 10)));
 
         // Guardar
-        $equipoModel = new \App\Models\EquipoModel();
+        $equipoModel = new EquipoModel();
         $equipoModel->insert([
             'nombre' => $nombre,
             'codigo' => $codigo
@@ -49,12 +49,11 @@ class EquipoController extends BaseController
         return redirect()->to(base_url('admin/equipos'))->with('success', 'Equipo creado correctamente con código: ' . $codigo);
     }
 
-
     // Ruta para obtener JSON dinámico de los equipos
     public function obtenerEquipos()
     {
-        $equipoModel = new \App\Models\EquipoModel();
-        $integranteModel = new \App\Models\IntegranteModel();
+        $equipoModel = new EquipoModel();
+        $integranteModel = new IntegranteModel();
 
         $equipos = $equipoModel->orderBy('creado_en', 'ASC')->findAll();
 
@@ -77,12 +76,8 @@ class EquipoController extends BaseController
             return $this->response->setJSON(['error' => 'El nombre del equipo es obligatorio.'])->setStatusCode(400);
         }
 
-        if (!isset($json['cantidad_integrantes']) || !is_numeric($json['cantidad_integrantes']) || $json['cantidad_integrantes'] <= 0) {
-            return $this->response->setJSON(['error' => 'La cantidad de integrantes debe ser un número mayor que cero.'])->setStatusCode(400);
-        }
-
-        if (!isset($json['integrantes']) || !is_array($json['integrantes']) || count($json['integrantes']) !== (int)$json['cantidad_integrantes']) {
-            return $this->response->setJSON(['error' => 'La cantidad de integrantes no coincide con el valor proporcionado.'])->setStatusCode(400);
+        if (!isset($json['integrantes']) || !is_array($json['integrantes']) || count($json['integrantes']) === 0) {
+            return $this->response->setJSON(['error' => 'Debe proporcionar al menos un integrante.'])->setStatusCode(400);
         }
 
         foreach ($json['integrantes'] as $i => $integrante) {
@@ -98,8 +93,7 @@ class EquipoController extends BaseController
         $equipoModel = new EquipoModel();
         $equipoId = $equipoModel->insert([
             'nombre' => $json['nombre_equipo'],
-            'codigo' => $codigo,
-            'cantidad_integrantes' => $json['cantidad_integrantes'] // 👈 agregado aquí
+            'codigo' => $codigo
         ]);
 
         // Guardar integrantes
