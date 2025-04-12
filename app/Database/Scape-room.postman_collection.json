@@ -497,6 +497,61 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Listar equipos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/equipos/obtenerEquipos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"equipos",
+						"obtenerEquipos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener codigo equipo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/equipos/obtener-codigo-por-id/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"equipos",
+						"obtener-codigo-por-id",
+						"3"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
