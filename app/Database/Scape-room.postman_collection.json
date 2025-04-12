@@ -434,7 +434,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"nombre_equipo\": \"Los Estrategas\",\r\n  \"integrantes\": [\r\n    { \"nombre\": \"Daniel Gómez\" },\r\n    { \"nombre\": \"Lucía Torres\" },\r\n    { \"nombre\": \"Marcos Herrera\" }\r\n  ]\r\n}",
+					"raw": "{\r\n  \"nombre_equipo\": \"Los Bobis\",\r\n  \"integrantes\": [\r\n    { \"nombre\": \"Jorge Mestanza\" },\r\n    { \"nombre\": \"Luz Ortega\" }\r\n  ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -532,12 +532,24 @@
 			"response": []
 		},
 		{
-			"name": "Obtener codigo equipo",
+			"name": "Obtene_codigo_equipo_reciente",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/admin/equipos/obtener-codigo-por-id/3",
+					"raw": "http://localhost:8080/admin/equipos/ultimo-codigo",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -546,8 +558,7 @@
 					"path": [
 						"admin",
 						"equipos",
-						"obtener-codigo-por-id",
-						"3"
+						"ultimo-codigo"
 					]
 				}
 			},

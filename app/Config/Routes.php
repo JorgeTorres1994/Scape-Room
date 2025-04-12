@@ -26,7 +26,7 @@ $routes->post('/admin/equipos/crear', 'EquipoController::crearEquipos');// JSON 
 
 $routes->post('/admin/equipos/crear', 'EquipoController::crearEquipos');// JSON dinámico 
 
-$routes->get('/admin/equipos/obtener-codigo-por-id/(:num)', 'EquipoController::obtenerCodigoPorId/$1');
+$routes->get('/admin/equipos/ultimo-codigo', 'EquipoController::obtenerUltimoCodigoEquipo');
 
 $routes->get('/admin/clientes', 'ClienteController::clientes');
 

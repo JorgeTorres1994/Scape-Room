@@ -112,27 +112,25 @@ class EquipoController extends BaseController
         ])->setStatusCode(201);
     }
 
-    public function obtenerCodigoPorId($id = null)
+    public function obtenerUltimoCodigoEquipo()
     {
-        if (!$id || !is_numeric($id)) {
-            return $this->response->setStatusCode(400)->setJSON([
-                'error' => 'ID inválido o no proporcionado.'
-            ]);
-        }
-
         $equipoModel = new \App\Models\EquipoModel();
-        $equipo = $equipoModel->find($id);
+
+        // Obtener el equipo más reciente por fecha de creación (o ID si lo prefieres)
+        $equipo = $equipoModel
+            ->orderBy('creado_en', 'DESC') 
+            ->first();
 
         if (!$equipo) {
             return $this->response->setStatusCode(404)->setJSON([
-                'error' => 'Equipo no encontrado.'
+                'error' => 'No se encontró ningún equipo.'
             ]);
         }
 
         return $this->response->setJSON([
             'equipo_id' => $equipo['id'],
-            'codigo' => $equipo['codigo'],
-            'nombre' => $equipo['nombre']
+            'codigo'    => $equipo['codigo'],
+            'nombre'    => $equipo['nombre']
         ]);
     }
 }
