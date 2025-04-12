@@ -19,7 +19,10 @@
                 <tr>
                     <td><?= esc($equipo['codigo']) ?></td>
                     <td><?= esc($equipo['nombre']) ?></td>
-                    <td><?= date('d/m/Y H:i', strtotime($equipo['creado_en'])) ?></td>
+                    <td data-order="<?= $equipo['creado_en'] ?>">
+                        <?= date('d/m/Y H:i', strtotime($equipo['creado_en'])) ?>
+                    </td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -115,8 +118,12 @@
     $(document).ready(function() {
         $('#equiposTable').DataTable({
             order: [
-                [1, 'asc']
-            ], // 👈 Columna 1 (Fecha de Registro) en orden ascendente por defecto
+                [2, 'desc'],
+            ],
+            columnDefs: [{
+                type: 'datetime',
+                targets: 2
+            }],
             paging: true,
             searching: true,
             "language": {

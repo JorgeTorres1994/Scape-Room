@@ -89,7 +89,7 @@
                     }
                 }
             ],
-            order: [[5, 'desc']],
+            order: [[3, 'desc']],
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
                 zeroRecords: "No se encontraron rankings",

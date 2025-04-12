@@ -16,7 +16,7 @@ class RankingController extends BaseController
             ->select('ranking.*, equipo.id as equipo_id, equipo.nombre as equipo_nombre, sala.nombre as sala_nombre')
             ->join('equipo', 'equipo.id = ranking.equipo_id')
             ->join('sala', 'sala.id = ranking.sala_id')
-            ->orderBy('registrado_en DESC')
+            ->orderBy('ranking.puntaje', 'DESC')
             ->findAll();
 
         return view('admin/ranking_list', ['rankings' => $rankings]);
@@ -30,7 +30,7 @@ class RankingController extends BaseController
             ->select('ranking.*, equipo.id as equipo_id, equipo.nombre as equipo_nombre, sala.nombre as sala_nombre')
             ->join('equipo', 'equipo.id = ranking.equipo_id')
             ->join('sala', 'sala.id = ranking.sala_id')
-            ->orderBy('ranking.registrado_en', 'DESC')
+            ->orderBy('ranking.puntaje', 'DESC')
             ->findAll();
 
         return $this->response->setJSON(['data' => $rankings]);

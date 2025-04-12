@@ -11,7 +11,7 @@ class EquipoController extends BaseController
     public function equipos()
     {
         $equipoModel = new EquipoModel();
-        $data['equipos'] = $equipoModel->orderBy('creado_en', 'ASC')->findAll();
+        $data['equipos'] = $equipoModel->orderBy('creado_en', 'DESC')->findAll();
 
         return view('admin/equipos_list', $data);
     }
@@ -55,7 +55,7 @@ class EquipoController extends BaseController
         $equipoModel = new EquipoModel();
         $integranteModel = new IntegranteModel();
 
-        $equipos = $equipoModel->orderBy('creado_en', 'ASC')->findAll();
+        $equipos = $equipoModel->orderBy('creado_en', 'DESC')->findAll();
 
         foreach ($equipos as &$equipo) {
             $equipo['integrantes'] = $integranteModel
@@ -110,5 +110,29 @@ class EquipoController extends BaseController
             'codigo_equipo' => $codigo,
             'equipo_id' => $equipoId
         ])->setStatusCode(201);
+    }
+
+    public function obtenerCodigoPorId($id = null)
+    {
+        if (!$id || !is_numeric($id)) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => 'ID inválido o no proporcionado.'
+            ]);
+        }
+
+        $equipoModel = new \App\Models\EquipoModel();
+        $equipo = $equipoModel->find($id);
+
+        if (!$equipo) {
+            return $this->response->setStatusCode(404)->setJSON([
+                'error' => 'Equipo no encontrado.'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'equipo_id' => $equipo['id'],
+            'codigo' => $equipo['codigo'],
+            'nombre' => $equipo['nombre']
+        ]);
     }
 }

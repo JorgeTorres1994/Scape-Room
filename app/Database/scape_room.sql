@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-04-2025 a las 04:27:34
+-- Tiempo de generación: 11-04-2025 a las 08:53:13
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `equipo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
+  `codigo` varchar(10) DEFAULT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -37,17 +38,22 @@ CREATE TABLE `equipo` (
 -- Volcado de datos para la tabla `equipo`
 --
 
-INSERT INTO `equipo` (`id`, `nombre`, `creado_en`) VALUES
-(1, 'Los Criptógrafos', '2025-03-26 07:15:33'),
-(2, 'Escape Masters', '2025-03-26 07:15:33'),
-(3, 'Cipher Squad', '2025-03-26 07:15:33'),
-(4, 'Los Descifradores', '2025-03-26 07:15:33'),
-(5, 'Enigma Team', '2025-03-26 07:15:33'),
-(6, 'Brain Hackers', '2025-03-26 07:15:33'),
-(7, 'Puzzle Kings', '2025-03-26 07:15:33'),
-(8, 'Mentes Maestras', '2025-03-26 07:15:33'),
-(24, 'Los Escapistas', '2025-04-09 08:11:56'),
-(25, 'Exploradores del Laberinto', '2025-04-09 08:21:56');
+INSERT INTO `equipo` (`id`, `nombre`, `codigo`, `creado_en`) VALUES
+(1, 'Los Criptógrafos', 'J7CL33IO', '2025-03-26 07:15:33'),
+(2, 'Escape Masters', '358N218L1', '2025-03-26 07:15:33'),
+(3, 'Cipher Squad', 'QONBNVBIQ', '2025-03-26 07:15:33'),
+(4, 'Los Descifradores', '2P2A3GDE', '2025-03-26 07:15:33'),
+(5, 'Enigma Team', '7L2E0DEKB', '2025-03-26 07:15:33'),
+(6, 'Brain Hackers', 'L99TX5C7', '2025-03-26 07:15:33'),
+(7, 'Puzzle Kings', 'NRCRQ2LSGQ', '2025-03-26 07:15:33'),
+(8, 'Mentes Maestras', 'PNJKWO9O', '2025-03-26 07:15:33'),
+(24, 'Los Escapistas', '2JQ5FAHWIT', '2025-04-09 08:11:56'),
+(25, 'Exploradores del Laberinto', '1ZI2WF2A', '2025-04-09 08:21:56'),
+(26, 'Los Invencibles', 'EQP-ZKX2EL', '2025-04-10 04:10:38'),
+(27, 'Los Rescatistas', 'EQP-BG8UVS', '2025-04-10 04:51:37'),
+(28, 'Escuadrón Élite', 'BXALCMBV6', '2025-04-10 05:04:07'),
+(29, 'Los Visionarios', '6GWBMOEDX', '2025-04-10 05:08:23'),
+(30, 'Los Estrategas', 'B8WB2DLOQB', '2025-04-11 06:49:52');
 
 -- --------------------------------------------------------
 
@@ -80,6 +86,42 @@ INSERT INTO `horario` (`id`, `sala_id`, `hora`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `integrante`
+--
+
+CREATE TABLE `integrante` (
+  `id` int(11) NOT NULL,
+  `equipo_id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `integrante`
+--
+
+INSERT INTO `integrante` (`id`, `equipo_id`, `nombre`) VALUES
+(1, 26, 'Carlos López'),
+(2, 26, 'María Díaz'),
+(3, 26, 'Luis Fernández'),
+(4, 27, 'Ana Morales'),
+(5, 27, 'José Ríos'),
+(6, 27, 'Lucía Quintana'),
+(7, 27, 'Renzo Méndez'),
+(8, 28, 'Valentina Ríos'),
+(9, 28, 'Tomás Salas'),
+(10, 28, 'Gabriel Soto'),
+(11, 28, 'Elena Vargas'),
+(12, 28, 'Mateo Herrera'),
+(13, 29, 'Isabela León'),
+(14, 29, 'Javier Fuentes'),
+(15, 29, 'Camila Terán'),
+(16, 30, 'Daniel Gómez'),
+(17, 30, 'Lucía Torres'),
+(18, 30, 'Marcos Herrera');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `ranking`
 --
 
@@ -88,8 +130,8 @@ CREATE TABLE `ranking` (
   `equipo_id` int(11) NOT NULL,
   `sala_id` int(11) NOT NULL,
   `puntaje` decimal(10,2) NOT NULL,
-  `codigo` varchar(20) DEFAULT NULL,
-  `tiempo` time NOT NULL,
+  `tiempo` int(11) DEFAULT 0,
+  `cantidad_integrantes` int(11) DEFAULT NULL,
   `registrado_en` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -97,14 +139,18 @@ CREATE TABLE `ranking` (
 -- Volcado de datos para la tabla `ranking`
 --
 
-INSERT INTO `ranking` (`id`, `equipo_id`, `sala_id`, `puntaje`, `codigo`, `tiempo`, `registrado_en`) VALUES
-(1, 1, 1, 800.50, NULL, '09:50:30', '2025-03-27 04:12:24'),
-(2, 2, 2, 833.54, NULL, '00:45:12', '2025-03-27 04:12:24'),
-(3, 3, 3, 690.25, NULL, '00:48:45', '2025-03-27 04:12:24'),
-(4, 4, 2, 100.00, NULL, '18:25:33', '2025-03-27 04:12:24'),
-(5, 5, 3, 566.48, NULL, '00:52:33', '2025-03-27 04:12:24'),
-(6, 24, 2, 0.00, NULL, '00:45:22', '2025-04-09 08:11:56'),
-(7, 25, 2, 396.00, 'EQP-0CDF3', '00:38:12', '2025-04-09 08:21:56');
+INSERT INTO `ranking` (`id`, `equipo_id`, `sala_id`, `puntaje`, `tiempo`, `cantidad_integrantes`, `registrado_en`) VALUES
+(1, 1, 1, 800.50, 80, NULL, '2025-03-27 04:12:24'),
+(2, 2, 2, 472.00, 40, 3, '2025-03-27 04:12:24'),
+(3, 3, 3, 690.25, 0, NULL, '2025-03-27 04:12:24'),
+(4, 4, 2, 115.00, 10, NULL, '2025-03-27 04:12:24'),
+(5, 5, 3, 566.48, 50, NULL, '2025-03-27 04:12:24'),
+(6, 24, 2, 472.00, 40, NULL, '2025-04-09 08:11:56'),
+(7, 25, 2, 396.00, 50, NULL, '2025-04-09 08:21:56'),
+(8, 5, 2, 890.00, 0, NULL, '2025-04-10 06:02:35'),
+(9, 3, 2, 750.00, 70, NULL, '2025-04-10 06:54:23'),
+(10, 3, 1, 1000.00, 50, 3, '2025-04-11 05:04:26'),
+(11, 5, 1, 950.00, 50, 4, '2025-04-11 06:21:29');
 
 -- --------------------------------------------------------
 
@@ -215,6 +261,13 @@ ALTER TABLE `horario`
   ADD UNIQUE KEY `sala_hora` (`sala_id`,`hora`);
 
 --
+-- Indices de la tabla `integrante`
+--
+ALTER TABLE `integrante`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `equipo_id` (`equipo_id`);
+
+--
 -- Indices de la tabla `ranking`
 --
 ALTER TABLE `ranking`
@@ -251,7 +304,7 @@ ALTER TABLE `usuarios_admin`
 -- AUTO_INCREMENT de la tabla `equipo`
 --
 ALTER TABLE `equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
@@ -260,10 +313,16 @@ ALTER TABLE `horario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT de la tabla `integrante`
+--
+ALTER TABLE `integrante`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
 -- AUTO_INCREMENT de la tabla `ranking`
 --
 ALTER TABLE `ranking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `reserva`
@@ -292,6 +351,12 @@ ALTER TABLE `usuarios_admin`
 --
 ALTER TABLE `horario`
   ADD CONSTRAINT `horario_ibfk_1` FOREIGN KEY (`sala_id`) REFERENCES `sala` (`id`);
+
+--
+-- Filtros para la tabla `integrante`
+--
+ALTER TABLE `integrante`
+  ADD CONSTRAINT `integrante_ibfk_1` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `ranking`
