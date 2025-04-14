@@ -39,7 +39,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"reserva\": {\r\n    \"cliente\": \"Sandra Perez\",\r\n    \"correo\": \"sandra.perez@gmail.com\",\r\n    \"telefono\": \"978415121\",\r\n    \"horario_id\": 1, \r\n    \"fecha\": \"2025-04-25\",\r\n    \"cantidad_jugadores\": 3,\r\n    \"metodo_pago\": \"plin\",\r\n    \"precio_total\": 120.00,\r\n    \"estado\": \"pendiente\"\r\n  }\r\n}",
+					"raw": "{\r\n  \"reserva\": {\r\n    \"cliente\": \"Valeria Rojas\",\r\n    \"correo\": \"valeria.rojas@gmail.com\",\r\n    \"telefono\": \"974112563\",\r\n    \"horario_id\": 3,\r\n    \"fecha\": \"2025-04-27\",\r\n    \"cantidad_jugadores\": 2,\r\n    \"metodo_pago\": \"plin\",\r\n    \"precio_total\": 80.00,\r\n    \"estado\": \"pendiente\"\r\n  }\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -361,7 +361,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"reserva\": {\r\n    \"activo\": 0\r\n  }\r\n}",
+					"raw": "{\r\n  \"reserva\": {\r\n    \"estado\": \"cancelada\"\r\n  }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -369,7 +369,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/admin/reservas/toggle-activo/1",
+					"raw": "http://localhost:8080/admin/reservas/cambiar-estado/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -378,8 +378,8 @@
 					"path": [
 						"admin",
 						"reservas",
-						"toggle-activo",
-						"1"
+						"cambiar-estado",
+						"4"
 					]
 				}
 			},

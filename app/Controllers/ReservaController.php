@@ -25,7 +25,7 @@ class ReservaController extends BaseController
             ->select('reserva.*, horario.hora, sala.nombre AS sala_nombre')
             ->join('horario', 'horario.id = reserva.horario_id')
             ->join('sala', 'sala.id = horario.sala_id')
-            ->orderBy('reserva.fecha', 'ASC');
+            ->orderBy('created_at', 'DESC');
 
         if ($salaId) {
             $reservaModel->where('sala.id', $salaId);
@@ -208,21 +208,21 @@ class ReservaController extends BaseController
         ]);
     }
 
-    public function toggleActivo($id)
+    public function cambiarEstado($id)
     {
-        $json = $this->request->getJSON(true);
-        $estado = $json['reserva']['activo'] ?? null;
+        $input = $this->request->getJSON();
+        $nuevoEstado = $input->reserva->estado;
 
-        if (!isset($estado)) {
-            return $this->response->setStatusCode(400)->setJSON([
-                'success' => false,
-                'message' => 'Campo "activo" no proporcionado.'
-            ]);
+        $reservaModel = new ReservaModel();
+        $reserva = $reservaModel->find($id);
+        if ($reserva) {
+            $reserva['estado'] = $nuevoEstado; // Actualiza el estado
+            $reservaModel->update($id, $reserva);
+
+            // Devuelve la reserva actualizada
+            return $this->response->setJSON(['success' => true, 'reserva' => $reserva]);
         }
 
-        $reservaModel = new \App\Models\ReservaModel();
-        $reservaModel->update($id, ['activo' => (int) $estado]);
-
-        return $this->response->setJSON(['success' => true]);
+        return $this->response->setJSON(['success' => false, 'message' => 'Reserva no encontrada.']);
     }
 }

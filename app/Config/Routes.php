@@ -61,5 +61,5 @@ $routes->get('/admin/reservas/editar/(:num)', 'ReservaController::editar/$1'); /
 $routes->post('/admin/reservas/actualizar/(:num)', 'ReservaController::actualizar/$1');
 $routes->put('/admin/reservas/api/actualizar/(:num)', 'ReservaController::actualizarReservaAPI/$1');
 
-$routes->post('admin/reservas/toggle-activo/(:num)', 'ReservaController::toggleActivo/$1');
+$routes->post('admin/reservas/cambiar-estado/(:num)', 'ReservaController::cambiarEstado/$1');
 

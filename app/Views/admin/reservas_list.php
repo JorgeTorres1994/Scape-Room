@@ -73,18 +73,15 @@
         padding: 5px;
     }
 
-    /* Estilo base de fila deshabilitada */
     .row-disabled {
         background-color: #e0e0e0 !important;
         opacity: 0.7;
     }
 
-    /* Bloquear hover en la fila completa */
     .row-disabled:hover {
         background-color: #e0e0e0 !important;
     }
 
-    /* Anular estilos visuales en badges y botones dentro de fila deshabilitada */
     .row-disabled .btn,
     .row-disabled .badge {
         pointer-events: none !important;
@@ -94,7 +91,6 @@
         border: none !important;
     }
 
-    /* Quitar efecto hover incluso si se fuerza con Bootstrap */
     .row-disabled .btn:hover,
     .row-disabled .badge:hover {
         background-color: #bbb !important;
@@ -109,10 +105,10 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     $(document).ready(function() {
-        // Cargar dinámicamente las salas
         $.get('<?= base_url('admin/salas/obtener-json') ?>', function(data) {
             if (Array.isArray(data)) {
                 data.forEach(function(sala) {
@@ -145,15 +141,6 @@
                     data: 'cantidad_jugadores'
                 },
                 {
-                    data: 'estado',
-                    render: function(data) {
-                        if (data === 'pendiente') return '<span class="badge bg-warning text-dark">Pendiente</span>';
-                        if (data === 'confirmada') return '<span class="badge bg-success">Confirmada</span>';
-                        if (data === 'cancelada') return '<span class="badge bg-danger">Cancelada</span>';
-                        return data;
-                    }
-                },
-                {
                     data: 'metodo_pago',
                     render: function(data) {
                         if (data === 'yape') return '<span class="badge bg-secondary">Yape</span>';
@@ -165,33 +152,62 @@
                     data: 'precio_total',
                     render: $.fn.dataTable.render.number(',', '.', 2, 'S/ ')
                 },
+
+                {
+                    data: 'estado',
+                    render: function(data) {
+                        if (data === 'pendiente') return '<span class="badge bg-warning text-dark">Pendiente</span>';
+                        if (data === 'confirmada') return '<span class="badge bg-success">Confirmada</span>';
+                        if (data === 'cancelada') return '<span class="badge bg-danger">Cancelada</span>';
+                        return data;
+                    }
+                },
                 {
                     data: 'fecha'
                 },
                 {
-                    data: 'created_at'
+                    data: 'created_at',
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            const utcDate = new Date(data);
+                            const limaDate = new Date(utcDate.getTime() - (5 * 60 * 60 * 1000));
+                            return limaDate.toLocaleString('es-PE', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                        }
+                        return data; // para ordenamiento interno
+                    }
                 },
 
                 {
                     data: null,
                     render: function(data, type, row) {
-                        const editBtn = row.activo ?
-                            `<a href="<?= base_url('admin/reservas/editar/') ?>${row.id}" class="btn btn-sm btn-warning">Editar</a>` :
-                            `<button class="btn btn-sm btn-secondary" disabled>Editar</button>`;
+                        // Si la reserva está cancelada, no se puede editar, se muestra botón de "Activar".
+                        const editBtn = (row.estado === 'cancelada') ?
+                            `<button class="btn btn-sm btn-secondary" disabled>Editar</button>` :
+                            `<a href="<?= base_url('admin/reservas/editar/') ?>${row.id}" class="btn btn-sm btn-warning">Editar</a>`;
 
-                        const toggleBtn = row.activo ?
-                            `<button type="button" class="btn btn-sm btn-danger ms-1 toggle-estado" data-id="${row.id}">Deshabilitar</button>` :
-                            `<button type="button" class="btn btn-sm btn-success ms-1 toggle-estado" data-id="${row.id}">Habilitar</button>`;
-
+                        // Si no está cancelada, se muestra un botón "Cancelar"
+                        // Si ya está cancelada, se muestra un botón "Activar"
+                        const toggleBtn = (row.estado !== 'cancelada') ?
+                            `<button type="button" class="btn btn-sm btn-danger ms-1 toggle-estado" data-id="${row.id}">Cancelar</button>` :
+                            `<button type="button" class="btn btn-sm btn-success ms-1 toggle-estado" data-id="${row.id}">Bloqueado</button>`;
 
                         return `${editBtn} ${toggleBtn}`;
                     },
                     orderable: false,
                     searchable: false
-                }
+                },
+            ],
+            order: [
+                [10, 'desc']
             ],
             createdRow: function(row, data) {
-                if (data.activo === 0 || data.activo === '0') {
+                if (data.estado === 'cancelada') { // Verificar si el estado es "cancelada"
                     $(row).addClass('table-secondary row-disabled');
                     $(row).find('a, button').prop('disabled', true).addClass('disabled').css({
                         'pointer-events': 'none',
@@ -199,7 +215,6 @@
                     });
                 }
             },
-
             language: {
                 lengthMenu: "Mostrar _MENU_ registros por página",
                 zeroRecords: "No se encontraron reservas",
@@ -217,10 +232,10 @@
         });
 
         $('#filtro_sala, #filtro_fecha, #filtro_estado, #filtro_pago').on('change', function() {
-            table.column(3).search($('#filtro_sala').val());
-            table.column(8).search($('#filtro_estado').val());
-            table.column(6).search($('#filtro_pago').val());
-            table.column(9).search($('#filtro_fecha').val());
+            table.column(3).search($('#filtro_sala').val()); // Sala
+            table.column(6).search($('#filtro_pago').val()); // Método de pago
+            table.column(9).search($('#filtro_fecha').val()); // Fecha servicio
+            table.column(8).search($('#filtro_estado').val()); // Estado (pendiente, confirmada, cancelada)
             table.draw();
         });
 
@@ -228,34 +243,60 @@
             e.preventDefault();
 
             const id = $(this).data('id');
-            const nuevoEstado = $(this).hasClass('btn-danger') ? 0 : 1;
+            const btnText = $(this).text().trim().toLowerCase();
 
-            fetch(`<?= base_url('admin/reservas/toggle-activo/') ?>${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        reserva: {
-                            activo: nuevoEstado
-                        }
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        $('#reservasTable').DataTable().ajax.reload();
-                    } else {
-                        alert(data.message || 'Error al cambiar el estado.');
-                    }
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    alert('Error al enviar solicitud.');
-                });
+            let nuevoEstado;
+            let confirmMessage;
+
+            if (btnText === 'cancelar') {
+                nuevoEstado = 'cancelada';
+                confirmMessage = '¿Desea bloquear esta reserva?';
+            } else if (btnText === 'activar') {
+                nuevoEstado = 'pendiente'; // O "confirmada", si prefieres otro valor
+                confirmMessage = '¿Desea activar esta reserva?';
+            } else {
+                return;
+            }
+
+            // Mostrar confirmación flotante
+            Swal.fire({
+                title: 'Confirmación',
+                text: confirmMessage,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`<?= base_url('admin/reservas/cambiar-estado/') ?>${id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                reserva: {
+                                    estado: nuevoEstado
+                                }
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                $('#reservasTable').DataTable().ajax.reload(null, false);
+                                Swal.fire('Éxito', 'El estado de la reserva fue actualizado.', 'success');
+                            } else {
+                                Swal.fire('Error', data.message || 'No se pudo cambiar el estado.', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error');
+                        });
+                }
+            });
         });
 
     });
 </script>
-
 <?= $this->endSection() ?>
